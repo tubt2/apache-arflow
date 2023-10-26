@@ -14,8 +14,9 @@ local_tz = timezone('Asia/Ho_Chi_Minh')
 conn = duckdb.connect(database=r'D:\DuckDB\duckdb.db', read_only=False)
 
 # define function
-def LoadtoDuck(filename):
+def LoadtoDuck():
     '''function load csv file to duckdb table'''
+    filename = 'deposit'
     extension = '.csv'
     parent = r'D:\flatfile'
     csv_source = os.path.join(parent, f'{filename}{extension}')
@@ -59,13 +60,13 @@ start_process = BashOperator(
 
 loadcsv1 = PythonOperator(
     task_id='loadcsv1',
-    python_callable=LoadtoDuck(filename='customer'),
+    python_callable=LoadtoDuck,
     dag=main_dag,
 )
 
 loadcsv2 = PythonOperator(
     task_id='task3',
-    python_callable=LoadtoDuck(filename='deposit'),
+    python_callable=LoadtoDuck,
     dag=main_dag,
 )
 
